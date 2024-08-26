@@ -1,4 +1,4 @@
-package net.ensah.ensahterrain.security;
+package net.ensah.ensahterrain.service.Impl;
 
 import jakarta.transaction.Transactional;
 import net.ensah.ensahterrain.dto.MatchRequestDto;

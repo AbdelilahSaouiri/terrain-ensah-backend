@@ -3,11 +3,10 @@ package net.ensah.ensahterrain.controller;
 import net.ensah.ensahterrain.dto.MatchRequestDto;
 import net.ensah.ensahterrain.dto.MatchResponseDto;
 import net.ensah.ensahterrain.exceptions.MatchException;
-import net.ensah.ensahterrain.security.MatchServiceImpl;
+import net.ensah.ensahterrain.service.Impl.MatchServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -23,14 +22,14 @@ public class MatchController {
 
     @GetMapping
     public ResponseEntity<?>  getAllMatches(@RequestParam(name = "jour",required = true) Integer jour){
-       List<MatchResponseDto> allMatches = matchService.getAllMatches(jour);
-       return ResponseEntity.ok().body(allMatches);
-   }
+        List<MatchResponseDto> allMatches = matchService.getAllMatches(jour);
+        return ResponseEntity.ok().body(allMatches);
+    }
 
     @PostMapping
     public ResponseEntity<MatchResponseDto> ReserverMatch(@RequestBody MatchRequestDto matchRequestDto) throws MatchException {
-           MatchResponseDto matchResponseDto = matchService.addNewMatch(matchRequestDto);
-           return ResponseEntity.ok().body(matchResponseDto);
+        MatchResponseDto matchResponseDto = matchService.addNewMatch(matchRequestDto);
+        return ResponseEntity.ok().body(matchResponseDto);
 
     }
 }
