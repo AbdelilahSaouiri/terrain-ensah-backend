@@ -1,14 +1,13 @@
 package net.ensah.ensahterrain.exceptions;
 
-public enum ErrorMessage {
-    MISSING_REQUIRED_FIELD("missing required field"),
-    RECORD_ALREADY_EXISTS("record already exists"),
+public enum UserErrorMessage {
+    RECORD_ALREADY_EXISTS("Cet utilisateur deja Existe"),
     INTERNAL_SERVER_ERROR("Internal terrain-Ensah server error"),
-    NO_RECORD_FOUND("no record found");
+    NO_RECORD_FOUND("Cet utilisateur n'existe pas ");
 
     private String message;
 
-    ErrorMessage(String message) {
+    UserErrorMessage(String message) {
         this.message = message;
     }
 

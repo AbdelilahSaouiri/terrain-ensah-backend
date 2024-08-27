@@ -1,11 +1,14 @@
 package net.ensah.ensahterrain.controller;
 
 import jakarta.validation.Valid;
-import net.ensah.ensahterrain.dto.LoginDto;
+import net.ensah.ensahterrain.dto.UserRequestDto;
 import net.ensah.ensahterrain.dto.RegisterDto;
-import net.ensah.ensahterrain.service.UserService;
+import net.ensah.ensahterrain.security.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -14,7 +17,8 @@ public class AuthController {
 
     private final UserService userService;
 
-    public AuthController(UserService userService) {
+
+    public AuthController(UserService userService, AuthenticationManager authenticationManager) {
         this.userService = userService;
     }
 
@@ -24,13 +28,15 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody @Valid LoginDto loginDto) {
-        return null;
+    public ResponseEntity<?> login(@RequestBody @Valid UserRequestDto loginDto) {
+        Map<String, String> login = userService.login(loginDto);
+        return ResponseEntity.ok(login);
     }
 
     @GetMapping("/confirm-token")
     public ResponseEntity<?> confirmUserAccount(@RequestParam("token") String token) {
-        return userService.confirmEmail(token);
+        Map<String, String> infos = userService.confirmEmail(token);
+        return ResponseEntity.ok(infos);
     }
 
 }

@@ -1,4 +1,4 @@
-package net.ensah.ensahterrain.entity;
+package net.ensah.ensahterrain.security.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,6 +12,7 @@ import java.util.Date;
 @Builder
 public class ConfirmationToken {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "token_id")
     private Long tokenId;
     @Column(name = "confirmation_token")

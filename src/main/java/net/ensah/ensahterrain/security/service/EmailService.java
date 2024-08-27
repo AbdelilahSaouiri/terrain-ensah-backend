@@ -1,4 +1,4 @@
-package net.ensah.ensahterrain.service;
+package net.ensah.ensahterrain.security.service;
 
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
