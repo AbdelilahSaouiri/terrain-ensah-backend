@@ -20,7 +20,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmailIgnoreCase(email);
         if (user == null) {
             throw new UsernameNotFoundException("Cet utilisateur n'existe pas");
         }
@@ -30,10 +30,11 @@ public class UserDetailServiceImpl implements UserDetailsService {
                 .toArray(String[]::new);
 
 
-        return org.springframework.security.core.userdetails.User.withUsername(email)
+        UserDetails build = org.springframework.security.core.userdetails.User.withUsername(email)
                 .password(user.getPassword())
                 .roles(roleNames)
                 .build();
+        return build;
     }
 
 }

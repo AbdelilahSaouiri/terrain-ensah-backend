@@ -60,9 +60,11 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public ResponseEntity<?> saveUser(RegisterDto user) {
+    public Map<String, String> saveUser(RegisterDto user) {
+        Map<String,String> map= new HashMap<>();
         if(userRepository.existsByEmail(user.email())){
-               return ResponseEntity.badRequest().body("Error: Email address already in use");
+            map.put("message","Error: Email address already in use");
+            return map;
            }
         User user1 = userRegisterMapper.RegisterDtoToUser(user);
         List<Role> roles = new ArrayList<>();
@@ -88,7 +90,9 @@ public class UserServiceImpl implements UserService {
         simpleMailMessage.setText("To confirm your account, Please click here : "+
                 "http://localhost:4200/verifyEmail?token="+confirmationToken.getConfirmationToken());
         emailService.sendEmail(simpleMailMessage);
-        return ResponseEntity.ok("Verify email by the link sent to email address");
+        map.put("message","Verify email by the link sent to email address");
+        map.put("confirmationToken",confirmationToken.getConfirmationToken());
+        return map;
     }
 
     @Override
@@ -112,7 +116,7 @@ public class UserServiceImpl implements UserService {
                     new UsernamePasswordAuthenticationToken(user.getEmail(), rawPassword);
             Authentication authentication = authenticationManager.authenticate(authToken);
             // Generate JWT token
-            String jwtToken = generateJwtToken(authentication);
+            String jwtToken = generateJwtToken(authentication,user.getUserName());
             response.put("access-token", jwtToken);
             response.put("message", "Email verified successfully");
         } catch (Exception e) {
@@ -123,20 +127,18 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
-
     @Override
     public Map<String, String> login(UserRequestDto loginDto) {
         Map<String,String> map = new HashMap<>();
+        User byEmailIgnoreCase = userRepository.findByEmailIgnoreCase(loginDto.email());
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.email(), loginDto.password()));
          //generate Jwt token
-        String jwtToken = generateJwtToken(authenticate);
+        String jwtToken = generateJwtToken(authenticate,byEmailIgnoreCase.getUserName());
         map.put("access-token",jwtToken);
         return map;
     }
 
-
-    private String generateJwtToken(Authentication authenticate) {
+    private String generateJwtToken(Authentication authenticate,String userName) {
         String scope = authenticate.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(" "));
@@ -146,6 +148,7 @@ public class UserServiceImpl implements UserService {
                 .expiresAt(now.plus(10, ChronoUnit.MINUTES))
                 .subject(authenticate.getName())
                 .claim("scope", scope)
+                .claim("username", userName)
                 .build();
         JwtEncoderParameters jwtEncoderParameters = JwtEncoderParameters.from(
                 JwsHeader.with(MacAlgorithm.HS512).build(), jwtClaimsSet);

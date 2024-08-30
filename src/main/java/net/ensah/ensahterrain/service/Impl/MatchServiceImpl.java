@@ -10,6 +10,7 @@ import net.ensah.ensahterrain.mapper.MatchMapper;
 import net.ensah.ensahterrain.repository.MatchRepository;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -26,7 +27,7 @@ public class MatchServiceImpl {
         this.matchMapper = matchMapper;
     }
 
-    public MatchResponseDto addNewMatch(MatchRequestDto matchRequestDto) throws MatchException {
+    public MatchResponseDto addNewMatch(MatchRequestDto matchRequestDto, Principal principal) throws MatchException {
         Match byMatchTimeAAndMatchDate = matchRepository.findByMatchTimeAndDayNumber(matchRequestDto.MatchTime(), matchRequestDto.DayNumber());
         if(byMatchTimeAAndMatchDate != null) {
             throw new MatchException(MatchErrorMessage.RECORD_ALREADY_EXISTS.getMessage());
@@ -36,7 +37,7 @@ public class MatchServiceImpl {
                     .matchTime(matchRequestDto.MatchTime())
                     .matchDate(new Date())
                     .matchId(UUID.randomUUID().toString())
-                    .matchPlayer(null)
+                    .matchPlayer(principal.getName())
                     .dayNumber(matchRequestDto.DayNumber())
                     .build();
             Match savedMatch = matchRepository.save(newMatch);

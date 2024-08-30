@@ -13,8 +13,5 @@ public class EnsahTerrainApplication {
         SpringApplication.run(EnsahTerrainApplication.class, args);
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+
 }
