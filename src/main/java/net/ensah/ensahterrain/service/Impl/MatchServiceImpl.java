@@ -29,8 +29,12 @@ public class MatchServiceImpl {
 
     public MatchResponseDto addNewMatch(MatchRequestDto matchRequestDto, Principal principal) throws MatchException {
         Match byMatchTimeAAndMatchDate = matchRepository.findByMatchTimeAndDayNumber(matchRequestDto.MatchTime(), matchRequestDto.DayNumber());
+        Match byMatchPlayer = matchRepository.findByMatchPlayerAndDayNumber(principal.getName(),matchRequestDto.DayNumber());
         if(byMatchTimeAAndMatchDate != null) {
             throw new MatchException(MatchErrorMessage.RECORD_ALREADY_EXISTS.getMessage());
+        }
+        if(byMatchPlayer != null) {
+            throw new MatchException(MatchErrorMessage.ALREADY_RESEREVED_BY_SAME_PLAYER.getMessage());
         }
         else {
             Match newMatch = Match.builder()
@@ -38,6 +42,7 @@ public class MatchServiceImpl {
                     .matchDate(new Date())
                     .matchId(UUID.randomUUID().toString())
                     .matchPlayer(principal.getName())
+                    .adversaire(matchRequestDto.adversaire())
                     .dayNumber(matchRequestDto.DayNumber())
                     .build();
             Match savedMatch = matchRepository.save(newMatch);

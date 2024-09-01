@@ -12,4 +12,5 @@ import java.util.List;
 public interface MatchRepository extends JpaRepository<Match, Long> {
       Match   findByMatchTimeAndDayNumber(Integer matchTime,Integer dayNumber);
       List<Match>  findAllByDayNumber(Integer jour);
+     Match  findByMatchPlayerAndDayNumber(String matchPlayer,Integer Day);
 }

@@ -29,10 +29,8 @@ public class MatchController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<MatchResponseDto> addNewMatch(@RequestBody MatchRequestDto matchRequestDto,Principal principal) throws MatchException {
         MatchResponseDto matchResponseDto = matchService.addNewMatch(matchRequestDto,principal);
         return ResponseEntity.ok().body(matchResponseDto);
-
     }
 }

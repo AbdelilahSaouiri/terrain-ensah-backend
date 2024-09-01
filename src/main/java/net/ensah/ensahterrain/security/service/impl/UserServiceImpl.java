@@ -10,7 +10,8 @@ import net.ensah.ensahterrain.mapper.UserRegisterMapper;
 import net.ensah.ensahterrain.security.Repository.ConfirmationTokenRepoistory;
 import net.ensah.ensahterrain.security.service.EmailService;
 import net.ensah.ensahterrain.security.service.UserService;
-import org.springframework.http.ResponseEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserServiceImpl implements UserService {
 
+    private static final Logger logger= LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
     private final ConfirmationTokenRepoistory confirmationTokenRepoistory;
     private final EmailService emailService;
@@ -122,7 +124,6 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             response.put("message", "Error: Authentication failed");
         }
-
         return response;
     }
 
@@ -135,6 +136,7 @@ public class UserServiceImpl implements UserService {
          //generate Jwt token
         String jwtToken = generateJwtToken(authenticate,byEmailIgnoreCase.getUserName());
         map.put("access-token",jwtToken);
+        logger.debug("token {}",jwtToken);
         return map;
     }
 

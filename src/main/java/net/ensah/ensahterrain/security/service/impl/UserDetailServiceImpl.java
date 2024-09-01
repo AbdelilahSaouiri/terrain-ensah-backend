@@ -29,7 +29,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
                 .map(role -> role.getRoleName())
                 .toArray(String[]::new);
 
-
         UserDetails build = org.springframework.security.core.userdetails.User.withUsername(email)
                 .password(user.getPassword())
                 .roles(roleNames)

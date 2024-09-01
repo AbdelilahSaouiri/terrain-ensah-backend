@@ -20,4 +20,5 @@ public class Match {
     private  Date  matchDate;
     private String matchPlayer;
     private Integer dayNumber;
+    private String adversaire;
 }

@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -51,13 +52,14 @@ public class SecurityConfig {
         return http.authorizeHttpRequests((req)->
               req.requestMatchers("/api/v1/auth/**").permitAll()
                       .requestMatchers(HttpMethod.GET,"/api/v1/matches").permitAll()
+                      .requestMatchers(HttpMethod.POST,"/api/v1/matches").hasRole("USER")
                       .anyRequest().authenticated()
                 )
                 .sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(cs->cs.disable())
                 .cors(Customizer.withDefaults())
                 .userDetailsService(userDetailServiceImpl)
-                .oauth2ResourceServer(oa->oa.jwt(jwt->jwtAuthenticationConverter()))
+                .oauth2ResourceServer(oa->oa.jwt(Customizer.withDefaults()))
                 .build();
 
     }
@@ -67,7 +69,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -81,7 +83,7 @@ public class SecurityConfig {
 
     @Bean
     JwtDecoder jwtDecoder() {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(), "RSA");
+       SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(), "RSA");
         return NimbusJwtDecoder.withSecretKey(secretKeySpec).macAlgorithm(MacAlgorithm.HS512).build();
     }
 
@@ -98,6 +100,7 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 
     @Bean
     AuthenticationManager authenticationManager(UserDetailsService userDetailsService){
