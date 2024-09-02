@@ -40,8 +40,8 @@ public class UserServiceImpl implements UserService {
     private final ConfirmationTokenRepoistory confirmationTokenRepoistory;
     private final EmailService emailService;
     private final JwtEncoder jwtEncoder;
-    private UserRegisterMapper userRegisterMapper;
-    private  PasswordEncoder passwordEncoder;
+    private final UserRegisterMapper userRegisterMapper;
+    private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
     public UserServiceImpl(UserRepository userRepository,
