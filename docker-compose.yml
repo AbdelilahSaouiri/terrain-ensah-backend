@@ -23,9 +23,9 @@ services:
       - springapimysql-net
     environment:
       MYSQL_DATABASE: terrainEnsah
-      MYSQL_USER: abdelilah
-      MYSQL_PASSWORD: abdelilah12
-      MYSQL_ROOT_PASSWORD: abdelilah12
+      MYSQL_USER: 
+      MYSQL_PASSWORD: 
+      MYSQL_ROOT_PASSWORD: 
 
 networks:
   springapimysql-net:
