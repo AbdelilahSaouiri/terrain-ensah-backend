@@ -1,7 +1,6 @@
 package net.ensah.ensahterrain.repository;
 
 import net.ensah.ensahterrain.entity.Match;
-import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,6 +10,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
+
+import static org.assertj.core.api.AssertionsForClassTypes.*;
 
 
 @DataJpaTest
@@ -34,9 +35,9 @@ class MatchRepositoryTest {
        Integer day=2;
        Integer matchTime=2;
        Match match=matchRepository.findByMatchTimeAndDayNumber(matchTime, day);
-       AssertionsForClassTypes.assertThat(match).isNotNull();
-       AssertionsForClassTypes.assertThat(match.getMatchTime()).isEqualTo(matchTime);
-       AssertionsForClassTypes.assertThat(match.getDayNumber()).isEqualTo(matchTime);
+       assertThat(match).isNotNull();
+       assertThat(match.getMatchTime()).isEqualTo(matchTime);
+       assertThat(match.getDayNumber()).isEqualTo(matchTime);
     }
 
     @Test
@@ -45,23 +46,23 @@ class MatchRepositoryTest {
         Integer day=2;
         Integer matchTime=4;
         Match match=matchRepository.findByMatchTimeAndDayNumber(matchTime, day);
-        AssertionsForClassTypes.assertThat(match).isNull();
+        assertThat(match).isNull();
     }
 
     @Test
     void shouldFindAllByDayNumber() {
         Integer day=2;
         List<Match> result = matchRepository.findAllByDayNumber(day);
-        AssertionsForClassTypes.assertThat(result).isNotNull();
-        AssertionsForClassTypes.assertThat(result.size()).isEqualTo(4);
-        AssertionsForClassTypes.assertThat(result.getFirst()).isNotNull();
+        assertThat(result).isNotNull();
+        assertThat(result.size()).isEqualTo(4);
+        assertThat(result.getFirst()).isNotNull();
     }
 
     @Test
      void shouldNotFindAllByDayNumber() {
         Integer day=3;
         List<Match> result = matchRepository.findAllByDayNumber(day);
-        AssertionsForClassTypes.assertThat(result.size()).isEqualTo(0);
+        assertThat(result.size()).isEqualTo(0);
     }
 
     @Test
@@ -69,9 +70,9 @@ class MatchRepositoryTest {
         String matchPlayer="abdelilah";
         Integer day=2;
         Match result = matchRepository.findByMatchPlayerAndDayNumber(matchPlayer, day);
-        AssertionsForClassTypes.assertThat(result).isNotNull();
-        AssertionsForClassTypes.assertThat(result.getDayNumber()).isEqualTo(day);
-        AssertionsForClassTypes.assertThat(result.getMatchPlayer()).isEqualTo(matchPlayer);
+        assertThat(result).isNotNull();
+        assertThat(result.getDayNumber()).isEqualTo(day);
+        assertThat(result.getMatchPlayer()).isEqualTo(matchPlayer);
     }
 
     @Test
@@ -79,6 +80,6 @@ class MatchRepositoryTest {
         String matchPlayer="abdelilah";
         Integer day=3;
         Match result = matchRepository.findByMatchPlayerAndDayNumber(matchPlayer, day);
-        AssertionsForClassTypes.assertThat(result).isNull();
+        assertThat(result).isNull();
     }
 }
